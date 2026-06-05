@@ -119,8 +119,8 @@
           });
           let state = 'disabled';
           if (counts.red > 0) state = 'red';
-          else if (counts.green > 0) state = 'green';
           else if (counts.orange > 0) state = 'orange';
+          else if (counts.green > 0) state = 'green';
           html.push(`<button class="date-btn ${state}" disabled>${d}</button>`);
         }
         html.push('</div></div>');
