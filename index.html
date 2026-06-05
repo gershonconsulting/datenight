@@ -28,39 +28,42 @@
   <div class="container">
     <header>
       <h1>6 à Table</h1>
-      <p class="subtitle">Attali, Raccah, and Attia • v1.0</p>
+      <p class="subtitle">Attali, Raccah, and Attia • v1.1</p>
     </header>
 
     <div class="tabs">
-      <button class="tab active" onclick="showTab('attia')">Attia</button>
-      <button class="tab" onclick="showTab('raccah')">Raccah</button>
-      <button class="tab" onclick="showTab('attali')">Attali</button>
-      <button class="tab" onclick="showTab('results')">Results</button>
+      <button class="tab active" onclick="showTab(event, 'attia')">Attia</button>
+      <button class="tab" onclick="showTab(event, 'raccah')">Raccah</button>
+      <button class="tab" onclick="showTab(event, 'attali')">Attali</button>
+      <button class="tab" onclick="showTab(event, 'results')">Results</button>
     </div>
 
-    <div id="attia" class="content active">
-      <div class="calendar" id="attia-cal"></div>
-    </div>
-    <div id="raccah" class="content">
-      <div class="calendar" id="raccah-cal"></div>
-    </div>
-    <div id="attali" class="content">
-      <div class="calendar" id="attali-cal"></div>
-    </div>
-    <div id="results" class="content">
-      <div class="results" id="results-content"></div>
-    </div>
+    <div id="attia" class="content active"><div class="calendar" id="attia-cal"></div></div>
+    <div id="raccah" class="content"><div class="calendar" id="raccah-cal"></div></div>
+    <div id="attali" class="content"><div class="calendar" id="attali-cal"></div></div>
+    <div id="results" class="content"><div class="results" id="results-content"></div></div>
   </div>
 
   <script>
     const couples = ['attia', 'raccah', 'attali'];
     let data = {};
 
-    function showTab(name) {
+    // Load pre-filled data
+    const prefilledData = {
+      "attia-7-1": "green", "attia-7-2": "orange", "attia-7-3": "red", "attia-7-4": "red", "attia-7-5": "red", "attia-7-6": "red", "attia-7-7": "red", "attia-7-8": "red", "attia-7-9": "orange", "attia-7-10": "orange", "attia-7-11": "orange", "attia-7-12": "orange", "attia-7-13": "orange", "attia-7-14": "orange", "attia-7-15": "orange", "attia-7-16": "orange", "attia-7-17": "orange", "attia-7-18": "orange", "attia-7-19": "orange", "attia-7-20": "orange", "attia-7-21": "orange", "attia-7-22": "green", "attia-7-23": "orange", "attia-7-24": "orange", "attia-7-25": "orange", "attia-7-26": "orange", "attia-7-27": "orange", "attia-7-28": "orange", "attia-7-29": "green", "attia-7-30": "red", "attia-7-31": "green",
+      "attia-8-1": "green", "attia-8-2": "green", "attia-8-3": "green", "attia-8-4": "red", "attia-8-5": "green", "attia-8-6": "green", "attia-8-7": "orange", "attia-8-8": "green", "attia-8-9": "green", "attia-8-10": "red", "attia-8-11": "red", "attia-8-12": "red", "attia-8-13": "red", "attia-8-14": "green", "attia-8-15": "green", "attia-8-16": "green", "attia-8-17": "green", "attia-8-18": "orange", "attia-8-19": "orange", "attia-8-20": "red", "attia-8-21": "orange", "attia-8-22": "green", "attia-8-23": "green", "attia-8-24": "orange", "attia-8-25": "orange", "attia-8-26": "orange", "attia-8-27": "orange", "attia-8-28": "green", "attia-8-29": "green", "attia-8-30": "green",
+      "raccah-7-1": "red", "raccah-7-2": "red", "raccah-7-3": "green", "raccah-7-4": "green", "raccah-7-5": "green", "raccah-7-6": "green", "raccah-7-7": "orange", "raccah-7-8": "red", "raccah-7-9": "red", "raccah-7-10": "green", "raccah-7-11": "green", "raccah-7-12": "red", "raccah-7-13": "red", "raccah-7-14": "red", "raccah-7-15": "red", "raccah-7-16": "red", "raccah-7-17": "green", "raccah-7-18": "green", "raccah-7-19": "red", "raccah-7-20": "red", "raccah-7-21": "orange", "raccah-7-22": "orange", "raccah-7-23": "orange", "raccah-7-24": "orange", "raccah-7-25": "red", "raccah-7-26": "red", "raccah-7-27": "red", "raccah-7-28": "orange", "raccah-7-29": "orange", "raccah-7-30": "red", "raccah-7-31": "green",
+      "raccah-8-1": "red", "raccah-8-2": "red", "raccah-8-3": "red", "raccah-8-4": "red", "raccah-8-5": "red", "raccah-8-6": "red", "raccah-8-7": "orange", "raccah-8-8": "green", "raccah-8-9": "green", "raccah-8-10": "red", "raccah-8-11": "red", "raccah-8-12": "red", "raccah-8-13": "red", "raccah-8-14": "orange", "raccah-8-15": "green", "raccah-8-16": "green", "raccah-8-17": "green", "raccah-8-18": "green", "raccah-8-19": "green", "raccah-8-20": "green", "raccah-8-21": "green", "raccah-8-22": "green", "raccah-8-23": "green", "raccah-8-24": "green", "raccah-8-25": "red", "raccah-8-26": "red", "raccah-8-27": "red", "raccah-8-28": "orange", "raccah-8-29": "green", "raccah-8-30": "green"
+    };
+    
+    Object.assign(data, prefilledData);
+    localStorage.setItem('data', JSON.stringify(data));
+
+    function showTab(e, name) {
       document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.getElementById(name).classList.add('active');
-      event.target.classList.add('active');
+      e.target.classList.add('active');
       if (name === 'results') renderResults();
     }
 
@@ -119,7 +122,6 @@
       document.getElementById('results-content').innerHTML = html.join('');
     }
 
-    data = JSON.parse(localStorage.getItem('data') || '{}');
     couples.forEach(renderCalendar);
     renderResults();
   </script>
