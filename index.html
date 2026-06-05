@@ -17,10 +17,11 @@
     .month { margin-bottom: 30px; }
     .month-title { font-weight: bold; margin-bottom: 10px; }
     .dates { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-    .date-btn { padding: 10px; border: 1px solid #ddd; background: white; cursor: pointer; text-align: center; border-radius: 4px; }
+    .date-btn { padding: 10px; border: 1px solid #ddd; background: white; cursor: pointer; text-align: center; border-radius: 4px; font-size: 12px; }
     .date-btn.green { background: #c8e6c9; }
     .date-btn.orange { background: #ffe0b2; }
     .date-btn.red { background: #ffcdd2; }
+    .date-btn.disabled { background: #f5f5f5; color: #999; cursor: default; }
     .results { background: white; padding: 20px; border-radius: 8px; }
   </style>
 </head>
@@ -41,14 +42,13 @@
     <div id="attia" class="content active"><div class="calendar" id="attia-cal"></div></div>
     <div id="raccah" class="content"><div class="calendar" id="raccah-cal"></div></div>
     <div id="attali" class="content"><div class="calendar" id="attali-cal"></div></div>
-    <div id="results" class="content"><div class="results" id="results-content"></div></div>
+    <div id="results" class="content"><div class="results" id="results-cal"></div></div>
   </div>
 
   <script>
     const couples = ['attia', 'raccah', 'attali'];
     let data = {};
 
-    // Load pre-filled data
     const prefilledData = {
       "attia-7-1": "green", "attia-7-2": "orange", "attia-7-3": "red", "attia-7-4": "red", "attia-7-5": "red", "attia-7-6": "red", "attia-7-7": "red", "attia-7-8": "red", "attia-7-9": "orange", "attia-7-10": "orange", "attia-7-11": "orange", "attia-7-12": "orange", "attia-7-13": "orange", "attia-7-14": "orange", "attia-7-15": "orange", "attia-7-16": "orange", "attia-7-17": "orange", "attia-7-18": "orange", "attia-7-19": "orange", "attia-7-20": "orange", "attia-7-21": "orange", "attia-7-22": "green", "attia-7-23": "orange", "attia-7-24": "orange", "attia-7-25": "orange", "attia-7-26": "orange", "attia-7-27": "orange", "attia-7-28": "orange", "attia-7-29": "green", "attia-7-30": "red", "attia-7-31": "green",
       "attia-8-1": "green", "attia-8-2": "green", "attia-8-3": "green", "attia-8-4": "red", "attia-8-5": "green", "attia-8-6": "green", "attia-8-7": "orange", "attia-8-8": "green", "attia-8-9": "green", "attia-8-10": "red", "attia-8-11": "red", "attia-8-12": "red", "attia-8-13": "red", "attia-8-14": "green", "attia-8-15": "green", "attia-8-16": "green", "attia-8-17": "green", "attia-8-18": "orange", "attia-8-19": "orange", "attia-8-20": "red", "attia-8-21": "orange", "attia-8-22": "green", "attia-8-23": "green", "attia-8-24": "orange", "attia-8-25": "orange", "attia-8-26": "orange", "attia-8-27": "orange", "attia-8-28": "green", "attia-8-29": "green", "attia-8-30": "green",
@@ -86,6 +86,32 @@
       document.getElementById(couple + '-cal').innerHTML = html.join('');
     }
 
+    function renderResults() {
+      const html = [];
+      for (let m = 7; m <= 8; m++) {
+        html.push(`<div class="month"><div class="month-title">${new Date(2026, m, 1).toLocaleString('en-US', {month:'long', year:'numeric'})}</div>`);
+        html.push('<div class="dates">');
+        const firstDay = new Date(2026, m, 1).getDay();
+        for (let i = 0; i < firstDay; i++) html.push('<div></div>');
+        const lastDay = new Date(2026, m + 1, 0).getDate();
+        for (let d = 1; d <= lastDay; d++) {
+          const key = `${m}-${d}`;
+          const counts = {green: 0, orange: 0};
+          couples.forEach(c => {
+            const state = data[`${c}-${key}`];
+            if (state === 'green') counts.green++;
+            else if (state === 'orange') counts.orange++;
+          });
+          let state = 'disabled';
+          if (counts.green > 0) state = 'green';
+          else if (counts.orange > 0) state = 'orange';
+          html.push(`<button class="date-btn ${state}" disabled>${d}</button>`);
+        }
+        html.push('</div></div>');
+      }
+      document.getElementById('results-cal').innerHTML = html.join('');
+    }
+
     function toggle(key, couple) {
       const states = ['none', 'green', 'orange', 'red'];
       const current = data[key] || 'none';
@@ -94,32 +120,6 @@
       localStorage.setItem('data', JSON.stringify(data));
       renderCalendar(couple);
       renderResults();
-    }
-
-    function renderResults() {
-      const html = [];
-      const dates = new Set();
-      for (let m = 7; m <= 8; m++) {
-        for (let d = 1; d <= new Date(2026, m + 1, 0).getDate(); d++) {
-          dates.add(`${m}-${d}`);
-        }
-      }
-      const ideal = [], possible = [];
-      dates.forEach(date => {
-        const counts = {green: 0, orange: 0};
-        couples.forEach(c => {
-          const state = data[`${c}-${date}`];
-          if (state === 'green') counts.green++;
-          else if (state === 'orange') counts.orange++;
-        });
-        if (counts.green > 0) ideal.push(date);
-        else if (counts.orange > 0) possible.push(date);
-      });
-      html.push(`<h3>Ideal dates: ${ideal.length}</h3>`);
-      ideal.forEach(d => { const [m,day] = d.split('-'); html.push(`<span style="background:#c8e6c9;padding:5px;margin:5px;display:inline-block;border-radius:4px;">${new Date(2026,m,day).toDateString()}</span>`); });
-      html.push(`<h3>Possible dates: ${possible.length}</h3>`);
-      possible.forEach(d => { const [m,day] = d.split('-'); html.push(`<span style="background:#ffe0b2;padding:5px;margin:5px;display:inline-block;border-radius:4px;">${new Date(2026,m,day).toDateString()}</span>`); });
-      document.getElementById('results-content').innerHTML = html.join('');
     }
 
     couples.forEach(renderCalendar);
