@@ -38,7 +38,7 @@ What it does        : Availability calendar for three couples (Attia, Raccah,
                       Attali) to find a dinner date. Tabs per couple plus a
                       Results tab; each day is green (ideal), orange
                       (possible) or red (not an option). Data is pre-filled
-                      in index.html for July-August-style 2026 months and kept
+                      in index.html for August and September 2026 and kept
                       in localStorage. Latest commit (2026-06-05) fixed the
                       Results priority order RED > ORANGE > GREEN.
 Who uses it         : Olivier and friends (personal).
@@ -69,8 +69,8 @@ Secrets / env vars  : none
 
 6. KNOWN BUGS / NEEDS FIXING
 ----------------------------------------------------------------
-- The calendar is hard-coded to 2026 months that may now be past; refresh
-  the dates if the dinner is still to be scheduled.
+- The calendar is hard-coded to August-September 2026, which are now past;
+  refresh the dates if a dinner is still to be scheduled.
 
 7. NEXT ACTION - START HERE
 ----------------------------------------------------------------
