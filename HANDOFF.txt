@@ -31,13 +31,16 @@ CRITICAL OPERATING RULES - do not break these:
 
 1. WHAT THIS REPO IS
 ----------------------------------------------------------------
-Product / site name : datenight (page title "6 a Table") - personal side
-                      project
+Product / site name : datenight (page title "6 a Table", v1.1) - personal
+                      side project
 Live URL            : none in the repo
-What it does        : Tiny Express server that serves one HTML page
-                      (index.html). Latest commit (2026-06-05) fixed the
-                      results priority order RED > ORANGE > GREEN. The page
-                      is a small interactive game/quiz for a table of six.
+What it does        : Availability calendar for three couples (Attia, Raccah,
+                      Attali) to find a dinner date. Tabs per couple plus a
+                      Results tab; each day is green (ideal), orange
+                      (possible) or red (not an option). Data is pre-filled
+                      in index.html for July-August-style 2026 months and kept
+                      in localStorage. Latest commit (2026-06-05) fixed the
+                      Results priority order RED > ORANGE > GREEN.
 Who uses it         : Olivier and friends (personal).
 
 2. STACK AND DEPLOY ROUTE
@@ -66,7 +69,8 @@ Secrets / env vars  : none
 
 6. KNOWN BUGS / NEEDS FIXING
 ----------------------------------------------------------------
-- None known.
+- The calendar is hard-coded to 2026 months that may now be past; refresh
+  the dates if the dinner is still to be scheduled.
 
 7. NEXT ACTION - START HERE
 ----------------------------------------------------------------
